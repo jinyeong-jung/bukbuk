@@ -5,12 +5,14 @@ import { getPostDataInclude, PostsPage } from "@/lib/types";
 
 export async function GET(
   req: NextRequest,
-  { params: { userId } }: { params: { userId: string } },
+  { params }: { params: { userId: string } },
 ) {
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
 
     const pageSize = 10;
+
+    const { userId } = await params;
 
     const { user } = await validateRequest();
 

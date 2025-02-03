@@ -5,12 +5,13 @@ import { getUserDataSelect } from "@/lib/types";
 export async function GET(
   req: Request,
   {
-    params: { username },
+    params,
   }: {
     params: { username: string };
   },
 ) {
   try {
+    const { username } = await params;
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {
