@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Metadata } from "next";
 import TrendsSidebar from "@/components/TrendsSidebar";
 import SearchResults from "./SearchResults";
 
-interface PageProps {
-  searchParams: {
-    q: string;
-  };
-}
-
-export function generateMetadata({ searchParams: { q } }: PageProps): Metadata {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: any;
+}): Promise<Metadata> {
+  const { q } = await Promise.resolve(searchParams);
   return {
     title: `Search results for "${q}"`,
   };
 }
 
-export default function Page({ searchParams: { q } }: PageProps) {
+export default async function Page({ searchParams }: { searchParams: any }) {
+  const { q } = await Promise.resolve(searchParams);
   return (
     <main className="flex w-full min-w-0 gap-5">
       <div className="w-full min-w-0 space-y-5">

@@ -1,18 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest } from "next/server";
 import { validateRequest } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { getPostDataInclude, PostsPage } from "@/lib/types";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { userId: string } },
-) {
+export async function GET(req: NextRequest, { params }: { params: any }) {
   try {
+    const { userId } = await Promise.resolve(params);
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
 
     const pageSize = 10;
-
-    const { userId } = await params;
 
     const { user } = await validateRequest();
 

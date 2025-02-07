@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
@@ -13,12 +14,6 @@ import FollowButton from "@/components/FollowButton";
 import UserPosts from "@/app/(main)/users/[username]/UserPosts";
 import Linkify from "@/components/Linkify";
 import EditProfileButton from "@/app/(main)/users/[username]/EditProfileButton";
-
-interface PageProps {
-  params: {
-    username: string;
-  };
-}
 
 const getUser = cache(async (username: string, loggedInUserId: string) => {
   const user = await prisma.user.findFirst({
@@ -38,8 +33,10 @@ const getUser = cache(async (username: string, loggedInUserId: string) => {
 
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
-  const { username } = await params;
+}: {
+  params: any;
+}): Promise<Metadata> {
+  const { username } = await Promise.resolve(params);
   const { user: loggedInUser } = await validateRequest();
 
   if (!loggedInUser) return {};
@@ -51,8 +48,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: PageProps) {
-  const { username } = await params;
+export default async function Page({ params }: { params: any }) {
+  const { username } = await Promise.resolve(params);
   const { user: loggedInUser } = await validateRequest();
 
   if (!loggedInUser) {

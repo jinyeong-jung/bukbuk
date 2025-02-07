@@ -1,12 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { validateRequest } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { LikeInfo } from "@/lib/types";
 
-export async function GET(
-  req: Request,
-  { params: { postId } }: { params: { postId: string } },
-) {
+export async function GET(req: Request, { params }: { params: any }) {
   try {
+    const { postId } = await Promise.resolve(params);
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {
@@ -50,11 +49,9 @@ export async function GET(
   }
 }
 
-export async function POST(
-  req: Request,
-  { params: { postId } }: { params: { postId: string } },
-) {
+export async function POST(req: Request, { params }: { params: any }) {
   try {
+    const { postId } = await Promise.resolve(params);
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {
@@ -109,11 +106,9 @@ export async function POST(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params: { postId } }: { params: { postId: string } },
-) {
+export async function DELETE(req: Request, { params }: { params: any }) {
   try {
+    const { postId } = await Promise.resolve(params);
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {

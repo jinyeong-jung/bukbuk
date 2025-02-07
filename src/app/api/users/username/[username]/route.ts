@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { validateRequest } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { getUserDataSelect } from "@/lib/types";
@@ -7,11 +8,11 @@ export async function GET(
   {
     params,
   }: {
-    params: { username: string };
+    params: any;
   },
 ) {
   try {
-    const { username } = await params;
+    const { username } = await Promise.resolve(params);
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {

@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notFound } from "next/navigation";
 import { cache, Suspense } from "react";
 import { validateRequest } from "@/auth";
@@ -11,12 +11,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { Loader2 } from "lucide-react";
 import Linkify from "@/components/Linkify";
 import FollowButton from "@/components/FollowButton";
-
-interface PageProps {
-  params: {
-    postId: string;
-  };
-}
+import { Metadata } from "next";
 
 const getPost = cache(async (postId: string, loggedInUserId: string) => {
   const post = await prisma.post.findUnique({
@@ -33,10 +28,12 @@ const getPost = cache(async (postId: string, loggedInUserId: string) => {
 
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
-  const { postId } = await params;
-
+}: {
+  params: any;
+}): Promise<Metadata> {
+  const { postId } = await Promise.resolve(params);
   const { user } = await validateRequest();
+
   if (!user) return {};
 
   const post = await getPost(postId, user.id);
@@ -46,15 +43,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: PageProps) {
-  const { postId } = await params;
-
+export default async function Page({ params }: { params: any }) {
+  const { postId } = await Promise.resolve(params);
   const { user } = await validateRequest();
 
   if (!user) {
     return (
       <p className="text-destructive">
-        You&apos;re not authorized to view this page
+        You&apos;re not authorized to view this page.
       </p>
     );
   }
